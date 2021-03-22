@@ -3,9 +3,7 @@ name: Deploy Preview to Github Page
 on:
   push:
     branches: [master]
-  repository_dispatch:
-    types:
-      - webhook-build
+  workflow_dispatch:
 
 jobs:
   pipeline:
