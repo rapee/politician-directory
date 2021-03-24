@@ -29,15 +29,19 @@ jobs:
       # Use synced data already in src/contents/*.yaml
       - name: Test git
         run: |
+          node -v
           ls -l src/contents
           git fetch && git checkout master
           git branch
           git log -1
           git status
+          git merge data
+          git log -1
+          git status
       - name: Build project
         run: npm run build
         env:
-          BASE_PATH: /constitution
+          BASE_PATH: /politician-directory
           GTAG_CODE: ${{ secrets.GTAG_CODE }}
       - name: Deploy to Github Page
         uses: peaceiris/actions-gh-pages@v3
