@@ -38,7 +38,7 @@ jobs:
           git branch
           git log -1
           git status
-          git pull origin master
+          git pull origin master --allow-unrelated-histories
           git config --local user.email "electinth@gmail.com"
           git config --local user.name "CI"
           git merge data
