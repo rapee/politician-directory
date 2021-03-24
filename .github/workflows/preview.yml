@@ -30,8 +30,10 @@ jobs:
       - name: Test git
         run: |
           ls -l src/contents
+          git fetch && git checkout master
           git branch
           git log
+          git status
       - name: Build project
         run: npm run build
         env:
