@@ -34,7 +34,7 @@ jobs:
           git branch
           node -v
           ls -l src/contents
-          git fetch && git checkout master
+          git fetch --all && git checkout master
           git branch
           git log -1
           git status
