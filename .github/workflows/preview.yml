@@ -30,7 +30,6 @@ jobs:
       - name: Test git
         run: |
           ls -l src/contents
-          git checkout master
           git branch
           git log
       - name: Build project
