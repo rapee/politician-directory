@@ -29,12 +29,15 @@ jobs:
       # Use synced data already in src/contents/*.yaml
       - name: Test git
         run: |
+          git log -1
+          git branch
           node -v
           ls -l src/contents
           git fetch && git checkout master
           git branch
           git log -1
           git status
+          git pull origin master --allow-unrelated-histories
           git merge data
           git log -1
           git status
