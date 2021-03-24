@@ -11,6 +11,8 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v2
+        with:
+          ref: ${{ github.head_ref }}
       - name: Set up Node
         uses: actions/setup-node@v2
         with:
@@ -25,3 +27,18 @@ jobs:
           branch: data
           commit_message: 'Sync data from Google Sheets'
           file_pattern: src/contents/*.yaml
+      # Use synced data already in src/contents/*.yaml
+      - name: Test git
+        run: |
+          ls -l src/contents
+          git branch
+      - name: Build project
+        run: npm build
+        env:
+          BASE_PATH: /constitution
+          GTAG_CODE: ${{ secrets.GTAG_CODE }}
+      - name: Deploy to Github Page
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
