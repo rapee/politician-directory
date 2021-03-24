@@ -19,13 +19,9 @@ jobs:
         run: npm install
       - name: Pull YAML data
         run: ./tools/sync_data.sh
-      - name: Build project
-        run: npm build
-        env:
-          BASE_PATH: /constitution
-          GTAG_CODE: 'UA-12345678-9'
-      - name: Deploy to Github Page
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Commit updated data
+        uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+          branch: data
+          commit_message: 'Sync data from Google Sheets'
+          file_pattern: src/contents/*.yaml
