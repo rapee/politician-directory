@@ -34,7 +34,7 @@ jobs:
           git branch
           git log
       - name: Build project
-        run: npm build
+        run: npm run build
         env:
           BASE_PATH: /constitution
           GTAG_CODE: ${{ secrets.GTAG_CODE }}
