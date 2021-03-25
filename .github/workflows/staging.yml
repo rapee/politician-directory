@@ -27,15 +27,18 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
           NETLIFY_DEPLOY_MESSAGE: "Deploy staging from commit ${{ github.sha }}"
-      - name: Test git
+      - name: Commit built files
         run: |
           git log -1
           git branch
           git status
           ls -l src/contents
+          ls -l public
+          git add -f public
+          git status
       - name: Commit updated data
         uses: stefanzweifel/git-auto-commit-action@v4
         with:
           branch: release
           commit_message: 'Sync data from Google Sheets'
-          file_pattern: src/contents/*.yaml, public
+          file_pattern: src/contents/*.yaml
