@@ -1,4 +1,4 @@
-name: Deploy Preview to Github Page
+name: Deploy to Staging
 
 on:
   push:
@@ -11,9 +11,9 @@ jobs:
     steps:
       - name: Checkout source code
         uses: actions/checkout@v2
-        with:
-          ref: data
-          fetch-depth: 0
+        # with:
+        #   ref: data
+        #   fetch-depth: 0
       - name: Set up Node
         uses: actions/setup-node@v2
         with:
@@ -22,37 +22,46 @@ jobs:
         run: npm install
       - name: Pull YAML data
         run: ./tools/sync_data.sh
-      - name: Commit updated data
-        uses: stefanzweifel/git-auto-commit-action@v4
-        with:
-          commit_message: 'Sync data from Google Sheets'
-          file_pattern: src/contents/*.yaml
+      # - name: Commit updated data
+      #   uses: stefanzweifel/git-auto-commit-action@v4
+      #   with:
+      #     commit_message: 'Sync data from Google Sheets'
+      #     file_pattern: src/contents/*.yaml
       # Use synced data already in src/contents/*.yaml
-      - name: Test git
-        run: |
-          git log -1
-          git branch
-          node -v
-          ls -l src/contents
-          git fetch --all && git checkout master
-          git branch
-          git log -1
-          git status
-          git pull origin master --allow-unrelated-histories
-          git config --local user.email "electinth@gmail.com"
-          git config --local user.name "CI"
-          git merge data
-          git log -1
-          git status
-      - name: Install dependencies
-        run: npm install
-      - name: Build project
-        run: npm run build
-        env:
-          BASE_PATH: /politician-directory
-          GTAG_CODE: ${{ secrets.GTAG_CODE }}
-      - name: Deploy to Github Page
-        uses: peaceiris/actions-gh-pages@v3
+      # - name: Test git
+      #   run: |
+      #     git log -1
+      #     git branch
+      #     node -v
+      #     ls -l src/contents
+      #     git fetch --all && git checkout master
+      #     git branch
+      #     git log -1
+      #     git status
+      #     git pull origin master --allow-unrelated-histories
+      #     git config --local user.email "electinth@gmail.com"
+      #     git config --local user.name "CI"
+      #     git merge data
+      #     git log -1
+      #     git status
+      # - name: Install dependencies
+      #   run: npm install
+      # - name: Build project
+      #   run: npm run build
+        # env:
+        #   BASE_PATH: /politician-directory
+        #   GTAG_CODE: ${{ secrets.GTAG_CODE }}
+      - name: Deploy to Netlify
+        uses: jsmrcaga/action-netlify-deploy@master
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./public
+          build_directory: public
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          NETLIFY_DEPLOY_MESSAGE: "Staging deploy v${{ github.ref }}"
+          NETLIFY_DEPLOY_TO_PROD: true
+
+      # - name: Deploy to Github Page
+      #   uses: peaceiris/actions-gh-pages@v3
+      #   with:
+      #     github_token: ${{ secrets.GITHUB_TOKEN }}
+      #     publish_dir: ./public
